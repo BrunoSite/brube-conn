@@ -1,0 +1,23 @@
+{
+  "name": "BrunoSite/brube-conn",
+  "description": "Crud para persistência de dados",
+  "type": "library",
+  "license": "MIT",
+  "version": "0.1.0",
+  "keywords": ["conn"],
+  "authors": [
+    {
+      "name": "Bruno Moura",
+      "email": "contato@brunosite.com"
+    }
+  ],
+  "require": {
+    "php": ">5.6"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Conn\\": "src/Conn"
+    }
+  }
+}
