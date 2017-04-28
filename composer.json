@@ -10,7 +10,7 @@
       "email": "contato@brunosite.com"
     }
   ],
-  "minimum-stability": "stable",
+  "minimum-stability": "beta",
   "require": {
     "php": ">=5.6"
   },
