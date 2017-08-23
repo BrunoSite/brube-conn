@@ -3,7 +3,7 @@
  * <b>Create</b> [ Conn ]
  * Classe responsável pelo cadastramento genérico de iformações no banco de dados.
  * @package brube/system
- * @author Bruno Moura <contato@brunoiste.com>
+ * @author Bruno Moura <contato@brunosite.com>
  * @copyright (c) 2017, MIT
  * @license http://brunosite.com/package/brube-system
  */
@@ -28,23 +28,23 @@ class Create extends Conn {
     private $Conn;
 
     /**
-     * <b>RunCreate:</b> Executar o armazenamento de informações no banco de dados usando prepared statements
+     * <b>run:</b> Executar o armazenamento de informações no banco de dados usando prepared statements
      * @param STRING $Table Tabela para qual o cadastro será armazenado
      * @param array $Data Array das informações a serem armazenadas
      */
-    public function RunCreate($Table, array $Data) {
+    public function run($Table, array $Data) {
         $this->Table = (string) $Table;
         $this->Data = $Data;
 
-        $this->MontarString();
-        $this->Execute();
+        $this->buildString();
+        $this->execute();
     }
 
     /**
      * Retorna um FALSE ou o ID do último elemento criado no banco de dados
      * @return array
      */
-    public function getResult() {
+    public function result() {
         return $this->Result;
     }
 
@@ -52,19 +52,19 @@ class Create extends Conn {
      * *************** MÉTODOS PRIVADOS **************
      * *********************************************** */
 
-    private function ConectPDO() {
+    private function connPDO() {
         $this->Conn = parent::getConn();
         $this->Create = $this->Conn->prepare($this->Create);
     }
 
-    private function MontarString() {
+    private function buildString() {
         $dados = implode(', ', array_keys($this->Data));
         $links = ':' . implode(', :', array_keys($this->Data));
         $this->Create = "INSERT INTO {$this->Table} ({$dados}) VALUES ({$links})";
     }
 
-    private function Execute() {
-        $this->ConectPDO();
+    private function execute() {
+        $this->connPDO();
         try {
             $this->Create->execute($this->Data);
             $this->Result = $this->Conn->lastInsertId();

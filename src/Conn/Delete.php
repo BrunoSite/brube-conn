@@ -3,7 +3,7 @@
  * <b>Delete</b> [ Conn ]
  * Classe responsável por deletar genéricamente informações no banco de dados
  * @package brube/system
- * @author Bruno Moura <contato@brunoiste.com>
+ * @author Bruno Moura <contato@brunosite.com>
  * @copyright (c) 2017, MIT
  * @license http://brunosite.com/package/brube-system
  */
@@ -24,23 +24,23 @@ class Delete extends Conn {
     private $Conn;
 
     /**
-     * <b>RunDelete:</b> Deletar o armazenamento de informações no banco de dados usando prepared statements
+     * <b>run:</b> Deletar o armazenamento de informações no banco de dados usando prepared statements
      * @param STRING $Table Tabela para qual a deleção deve ser concluida
      * @param array $Terms Termos das informações a serem deletadas
      */
-    public function RunDelete($Table, $Terms, $ParceString) {
+    public function run($Table, $Terms, $ParceString) {
         $this->Table = (string) $Table;
         $this->Terms = (string) $Terms;
         parse_str($ParceString, $this->Links);
 
-        $this->MontarString();
-        $this->Execute();
+        $this->buildString();
+        $this->execute();
     }
 
     /**
      * Retorna um FALSE ou o ID do último elemento cadastradono banco de dados
      */
-    public function getResult() {
+    public function result() {
         return $this->Result;
     }
 
@@ -48,35 +48,35 @@ class Delete extends Conn {
      * Retorna quantos dados foram deletados
      * @return INT
      */
-    public function getRowCount() {
+    public function countDeleted() {
         return $this->Delete->rowCount();
     }
 
     /**
-     * Reescreve uma parsestring e executa RunDelete()
+     * Reescreve uma parsestring e executa run()
      * @param type $ParceString
      */
-    public function getParce($ParceString) {
+    public function parce($ParceString) {
         parse_str($ParceString, $this->Links);
-        $this->MontarString();
-        $this->Execute();
+        $this->buildString();
+        $this->execute();
     }
 
     /*     * **********************************************
      * *************** MÉTODOS PRIVADOS **************
      * *********************************************** */
 
-    private function ConectarPDO() {
+    private function connPDO() {
         $this->Conn = parent::getConn();
         $this->Delete = $this->Conn->prepare($this->Delete);
     }
 
-    private function MontarString() {
+    private function buildString() {
         $this->Delete = "DELETE FROM {$this->Table} {$this->Terms}";
     }
 
-    private function Execute() {
-        $this->ConectarPDO();
+    private function execute() {
+        $this->connPDO();
         try {
             $this->Delete->execute($this->Links);
             $this->Result = true;

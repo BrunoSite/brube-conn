@@ -4,7 +4,7 @@
  * Classe abstrata de conexão usando padrão SingleTon.
  * Retorna um objeto PDO pelo método estático getConn();
  * @package brube/system
- * @author Bruno Moura <contato@brunoiste.com>
+ * @author Bruno Moura <contato@brunosite.com>
  * @copyright (c) 2017, MIT
  * @license http://brunosite.com/package/brube-system
  */
@@ -28,7 +28,7 @@ class Conn {
      * Realiza a conexão com a base de dados usando o modelo PDO SingleTon Pattern
      * Retorna um objeto PDO singleTon Pattern
      */
-    private static function Conectar() {
+    private static function Conn() {
         try {
             if (self::$Connect == NULL):
                 $dsn = 'mysql:host=' . self::$Host . ';dbname=' . self::$Dbsa;
@@ -48,7 +48,7 @@ class Conn {
      * Retorna um objeto PDO SingleTon Pattern
      */
     public static function getConn() {
-        return self::Conectar();
+        return self::Conn();
     }
 
 }

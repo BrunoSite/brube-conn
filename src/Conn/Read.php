@@ -3,7 +3,7 @@
  * <b>Read</b> [ Conn ]
  * Classe responsável pela leitura de informaões no banco de dados.
  * @package brube/system
- * @author Bruno Moura <contato@brunoiste.com>
+ * @author Bruno Moura <contato@brunosite.com>
  * @copyright (c) 2017, MIT
  * @license http://brunosite.com/package/brube-system
  */
@@ -30,21 +30,21 @@ class Read extends Conn {
      * @param array $Termos Termo das informações a serem lidas
      * @param string $ParceString | null Termo das informações a serem lidas
      */
-    public function RunRead($Tabela, $Termos = null, $ParceString = null) {
+    public function run($Tabela, $Termos = null, $ParceString = null) {
         if (!empty($ParceString)):
             $this->Links = $ParceString;
             parse_str($ParceString, $this->Links);
         endif;
 
         $this->Select = "SELECT * FROM {$Tabela} {$Termos}";
-        $this->Execute();
+        $this->execute();
     }
 
     /**
      * Retorna um FALSE ou um array dos dados resultantes
      * @return type
      */
-    public function getResult() {
+    public function result() {
         return $this->Result;
     }
 
@@ -52,7 +52,7 @@ class Read extends Conn {
      * Retorna o número de resultados obtidos dentro da tabela
      * @return INT
      */
-    public function getRowCount() {
+    public function count() {
         return $this->Read->rowCount();
     }
 
@@ -67,29 +67,29 @@ class Read extends Conn {
             $this->Links = $ParceString;
             parse_str($ParceString, $this->Links);
         endif;
-        $this->Execute();
+        $this->execute();
     }
 
     /**
-     * Reescrever a parsestring e obter os resultados da getResult()
+     * Reescrever a parsestring e obter os resultados da result()
      * @param type $ParceString
      */
-    public function getParce($ParceString) {
+    public function parce($ParceString) {
         parse_str($ParceString, $this->Links);
-        $this->Execute();
+        $this->execute();
     }
 
     /*     * **********************************************
      * *************** MÉTODOS PRIVADOS **************
      * *********************************************** */
 
-    private function ConectarPDO() {
+    private function connPDO() {
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($this->Select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
     }
 
-    private function MontarString() {
+    private function buildString() {
         if ($this->Links):
             foreach ($this->Links as $link => $value):
                 if ($link == 'limit' || $link == 'offset'):
@@ -108,15 +108,15 @@ class Read extends Conn {
         return json_encode($this->Result);
     }
 
-    private function Execute() {
-        $this->ConectarPDO();
+    private function execute() {
+        $this->connPDO();
         try {
-            $this->MontarString();
+            $this->buildString();
             $this->Read->execute();
             $this->Result = $this->Read->fetchAll();
         } catch (PDOException $e) {
             $this->Result = NULL;
-            LPError('<b>Erro ao Ler conteúdo: </b>' . $e->getMessage(), E_USER_ERROR);
+            echo '<b>Erro ao Ler conteúdo: </b>' . $e->getMessage();
             die;
         }
     }
